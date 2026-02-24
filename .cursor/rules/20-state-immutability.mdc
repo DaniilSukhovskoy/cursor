@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+# State rules (immutability)
+
+- New state is created, not mutated.
+- Functions return a result and do not modify their inputs.
+- Never modify objects/arrays passed as arguments.
+- Prefer pure functions in Domain.
+- In UI/Controller, state updates must be immutable (replace/clone, not in-place edits).
+
+If you see:
+- push/splice on shared arrays
+- direct property writes on objects shared across layers
+…refactor to return new objects/arrays instead.
+
+Exception:
+- Local, private variables inside a function may be mutated (no external references).

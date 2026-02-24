@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+---
+
+# Layering rules (frontend included)
+
+We enforce 3 layers:
+
+## Presentation layer (UI)
+Allowed:
+- HTML structure / templates / components
+- SCSS and class naming
+- UI event wiring (click, input, submit) that calls controllers/use-cases
+- Formatting for display (labels, date/price formatting)
+
+Forbidden:
+- Business rules (pricing/permissions/validation rules beyond basic input shape)
+- Direct API/storage calls
+- Mutating shared state objects in-place
+
+UI must be "dumb": render + collect input + call controller + render result.
+
+## Domain layer (business logic)
+Allowed:
+- Pure functions implementing business rules
+- Use-cases that return results (no DOM, no fetch)
+- Validation as rules, not UI hacks
+- Deterministic outputs from inputs
+
+Forbidden:
+- DOM access, CSS concerns, HTML assumptions
+- fetch / storage / local persistence
+
+## Data layer (API/storage)
+Allowed:
+- API clients (fetch), storage (localStorage/indexedDB), caching
+- Mapping DTO <-> domain models
+- Error normalization
+
+Forbidden:
+- Business rules (domain decides meaning, data only transports)
+- UI concerns (no DOM, no classes, no markup decisions)
+
+## Direction of dependencies
+- UI may depend on Controller + Domain
+- Controller may depend on Domain + Data
+- Domain depends on nothing (no UI, no Data)
+- Data depends on nothing above it (no Domain rules baked in)

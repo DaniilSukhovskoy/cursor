@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+---
+
+# Definition of Done for UI features
+
+A UI change is "done" only when:
+
+- Desktop + mobile layouts behave as specified (explicit breakpoints if applicable)
+- Interactive states are handled (hover/focus/active/disabled/loading if relevant)
+- Accessibility basics:
+  - keyboard reachable for interactive elements
+  - focus not lost in overlays/panels
+  - ESC closes overlays if expected
+- No data calls from UI layer
+- Domain logic remains pure (no DOM, no fetch)
+- No input mutation / in-place state mutation
+- SCSS follows strict BEM and doesn't increase specificity wars

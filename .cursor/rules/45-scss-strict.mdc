@@ -1,0 +1,185 @@
+---
+alwaysApply: true
+---
+
+# SCSS STRICT RULES (Non-Negotiable)
+
+These rules apply to ALL new and modified SCSS.
+
+Violations must be refactored before completion.
+
+--------------------------------------------------
+1. MOBILE FIRST ONLY
+--------------------------------------------------
+
+- Base styles MUST target mobile first.
+- Larger breakpoints may only extend or enhance.
+- No desktop-first overrides.
+
+Allowed pattern:
+
+.block {
+  padding: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .block {
+    padding: 2rem;
+  }
+}
+
+Forbidden:
+- max-width breakpoints
+- writing desktop styles first then overriding for mobile
+
+--------------------------------------------------
+2. NO "&" NESTING
+--------------------------------------------------
+
+- Never use "&" for building selectors.
+- Never nest to generate BEM elements/modifiers.
+- Never rely on implicit selector concatenation.
+
+Forbidden:
+
+.block {
+  &__element {}
+  &--modifier {}
+}
+
+.block {
+  &:hover {}
+}
+
+Allowed:
+
+.block {}
+
+.block__element {}
+
+.block--modifier {}
+
+.block:hover {}
+
+Explicit selectors only. Always.
+
+--------------------------------------------------
+3. MAXIMUM NESTING DEPTH = 1
+--------------------------------------------------
+
+- Only one level of nesting allowed, and only for:
+  - media queries
+  - pseudo-classes (:hover, :focus)
+  - pseudo-elements (::before, ::after)
+
+Forbidden:
+
+.block {
+  .child {
+    span {
+    }
+  }
+}
+
+--------------------------------------------------
+4. STRICT BEM
+--------------------------------------------------
+
+- Block: .component
+- Element: .component__part
+- Modifier: .component--variant
+- Element modifier: .component__part--state
+
+Rules:
+- No styling elements by tag inside blocks.
+- No cross-block styling.
+- No context-based selectors like:
+  .page .header .menu
+
+Each block must be independently portable.
+
+--------------------------------------------------
+5. REM ONLY (NO PX)
+--------------------------------------------------
+
+- All spacing, font-size, border-radius must use rem.
+- px allowed ONLY for:
+  - hairline borders (1px)
+  - shadow blur fine tuning
+  - media query pixel-to-rem conversion (converted to rem)
+
+Example:
+
+font-size: 1rem;
+margin-bottom: 1.5rem;
+
+Forbidden:
+
+margin: 24px;
+
+--------------------------------------------------
+6. USE DESIGN TOKENS ONLY
+--------------------------------------------------
+
+- Colors must come from CSS variables (e.g. var(--color-primary)).
+- Spacing must follow base spacing scale.
+- No arbitrary magic numbers.
+
+If a needed token does not exist:
+- add it in base/tokens.scss
+- do NOT hardcode.
+
+--------------------------------------------------
+7. NO GLOBAL LEAKAGE
+--------------------------------------------------
+
+Forbidden:
+- Styling raw tags globally (div, span, button).
+- Using wildcard selectors.
+- Using !important (unless explicitly justified).
+
+--------------------------------------------------
+8. NO SPECIFICITY ESCALATION
+--------------------------------------------------
+
+Forbidden:
+- Double class stacking for override (.block.block--active)
+- ID selectors
+- > + ~ chains unless behaviorally required
+
+Keep specificity flat.
+
+--------------------------------------------------
+9. COMPONENT OWNERSHIP
+--------------------------------------------------
+
+Each component:
+- Has one block
+- Has one SCSS file
+- Does not modify styles of another block
+
+--------------------------------------------------
+10. STATE HANDLING
+--------------------------------------------------
+
+State must be explicit modifier classes.
+
+Allowed:
+.block--active
+.block__item--disabled
+
+Forbidden:
+.block.active
+.block .is-active
+
+--------------------------------------------------
+END RESULT REQUIREMENT
+--------------------------------------------------
+
+Before finishing:
+- Confirm mobile-first structure.
+- Confirm no "&" usage.
+- Confirm no px used (except allowed cases).
+- Confirm no nesting beyond 1 level.
+- Confirm all colors/tokens use variables.
+- Confirm BEM compliance.

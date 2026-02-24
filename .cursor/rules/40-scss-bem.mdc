@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+# SCSS rules (strict BEM)
+
+- Use strict BEM for all new and modified UI:
+  - Block: .component
+  - Element: .component__part
+  - Modifier: .component--variant, .component__part--state
+
+- Keep specificity low:
+  - Avoid deep nesting
+  - Avoid styling by tag selectors inside blocks (no ".menu ul li a" chains)
+  - Avoid global overrides unless explicitly approved
+
+- Each UI component should have a clear SCSS ownership:
+  - One block per component
+  - Modifiers for variants/states
+  - No cross-component styling (no reaching into other blocks)
+
+- Do not introduce new global utility classes unless the project already uses a utility system.
+- Prefer tokens (CSS variables) for spacing/colors if they exist; do not invent random one-offs.

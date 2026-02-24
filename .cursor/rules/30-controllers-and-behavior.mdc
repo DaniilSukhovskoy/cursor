@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+# Controllers vs reusable behavior (your menu example)
+
+Pattern:
+- Reusable behavior modules (e.g. FloatingPanel) own mechanics:
+  - open/close, positioning, click-outside, ESC, focus trap, z-index, animation hooks
+- Controllers (e.g. MenuController) own orchestration:
+  - when to open/close
+  - what content/state to show
+  - mapping user events -> domain actions
+  - mapping domain results -> UI state
+
+Rules:
+- Reusable behavior modules must not include product-specific decisions.
+- Controllers must not contain styling rules or layout details; those belong to UI.
+- UI can compose behavior modules into different widgets (menu, dropdown) without rewriting mechanics.

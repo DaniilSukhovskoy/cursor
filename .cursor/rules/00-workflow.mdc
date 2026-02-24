@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+# Workflow
+
+- Start by restating the task as a short spec + acceptance checklist (desktop + mobile).
+- If there is no Figma or visual reference, ask ONLY the minimum questions required to remove ambiguity, then freeze the spec.
+- Implement with the smallest diff possible. No unrelated refactors.
+- After changes:
+  - build must pass
+  - lint must pass (if present)
+  - basic manual smoke steps must be listed (what to click / what to verify)
+- Finish with:
+  - files changed
+  - what to verify
+  - any tradeoffs / risks
