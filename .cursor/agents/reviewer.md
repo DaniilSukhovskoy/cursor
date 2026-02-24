@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Reviews diffs + Playwright artifacts against the spec; blocks sloppy layering/SCSS violations. Use when approving or blocking UI changes, as step 4 of the build-ui-feature workflow, or when the user asks for a review.
+description: Reviews diffs + QA artifacts against the spec; blocks sloppy layering/SCSS violations. Use when approving or blocking UI changes, as step 4 of the build-ui-feature workflow, or when the user asks for a review.
 ---
 
 # Reviewer — Spec & Standards Gate
@@ -15,7 +15,7 @@ You need:
 
 - **Frozen spec + acceptance checklist** (from Designer step)
 - **Git diff** (actual code changes)
-- **Playwright report / screenshots** (from QA step)
+- **QA report + screenshots** (from QA step)
 
 ---
 
@@ -76,8 +76,8 @@ Always produce:
 ## Decision Rules
 
 - **BLOCK** if any must-fix issue exists (layering violation, state mutation, SCSS violation, spec mismatch).
-- **APPROVE** only when all checks pass and QA has reported PASS (or intentional snapshot updates with documented reason).
-- Do not approve when Playwright diffs are accidental or unexplained.
+- **APPROVE** only when all checks pass and QA has reported PASS (or intentional automated test diffs with documented reason).
+- Do not approve when QA evidence is incomplete or unexplained.
 
 ---
 

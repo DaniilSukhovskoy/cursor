@@ -1,40 +1,69 @@
 ---
 name: qa
-description: Runs Playwright visual regression tests and reports snapshot diffs. Use when verifying UI changes, as step 3 of the build-ui-feature workflow, or when the user asks for QA or test verification.
+description: Verifies UI implementations against frozen specs using a universal QA workflow. Uses DevTools MCP walkthroughs, evidence screenshots, and optional automated checks when relevant.
 ---
 
-# QA — Visual Regression Verification
+# QA — Universal Implementation Verification
 
-**Goal:** Run UI tests, report results, and gate unintended visual changes.
-
----
-
-## Steps
-
-1. **Run tests:** `npm run test:ui`
-2. **If all pass:** Report PASS and exit.
-3. **If snapshots fail:** Analyze diffs and decide intent.
+**Goal:** Validate changed UI behavior against the frozen spec and produce evidence-based pass/fail reporting.
 
 ---
 
-## When Snapshots Fail
+## Required Inputs
 
-### 1. Compare to the spec
+Before QA starts, gather:
 
-- Obtain the frozen spec (from Designer step or current task).
-- Compare the diff to the acceptance checklist and explicit values.
+- Frozen spec + acceptance checklist (Designer output or explicit task criteria)
+- Scope of changes:
+  - routes/screens/components to verify
+  - required states and interactions
+  - desktop/mobile expectations
+- Test environment details:
+  - app URL
+  - required account and test data
 
-### 2. Classify intent
+If any required input is missing, report `BLOCKED` and list missing items.
 
-| Classification | Action |
-|----------------|--------|
-| **Accidental** — Diff does not match spec, looks like regression or unintended side effect | Propose fixes. **Block.** Do not update snapshots. |
-| **Intentional** — Diff aligns with spec or approved change | Instruct: run `npm run test:ui:update` and **require a written reason** (e.g. "Updated per spec: padding changed to 1.5rem on mobile"). |
+---
 
-### 3. Never auto-update snapshots
+## Default Execution Protocol (DevTools MCP)
 
-- Do not run `npm run test:ui:update` yourself.
-- Require the implementer or user to run it and document the reason.
+1. Open a **new browser window** for this QA run.
+2. Attempt to enter **fullscreen** mode (best effort).
+   - If fullscreen is unavailable, continue and record the limitation.
+3. Walk through all changed flows/screens/components in scope.
+4. Validate expected states and behavior:
+   - hover/focus/active/disabled/loading/empty (when applicable)
+   - keyboard reachability for interactive controls
+   - focus behavior in overlays/panels
+   - ESC closes overlays when expected by spec
+5. Capture screenshots as evidence throughout the flow.
+   - Save artifacts under `artifacts/qa-screenshots/<run-id>/...`
+   - Use descriptive filenames with route/component + viewport + state
+6. Compare observed behavior against acceptance checklist and classify outcome.
+
+---
+
+## Optional Automated Checks (Non-Mandatory)
+
+Use automated tests (Playwright/component/integration) when:
+
+- requested by the task, or
+- present in the project workflow as a required gate.
+
+Rules:
+
+- Do not assume one hardcoded command for all repositories.
+- If automated checks are run, include command and result in report.
+- If automated checks are skipped, explicitly state why.
+
+---
+
+## Result Classification
+
+- **PASS:** All required checks meet the frozen spec.
+- **FAIL:** One or more acceptance items do not match expected behavior.
+- **BLOCKED:** QA could not complete because inputs/environment were missing or inaccessible.
 
 ---
 
@@ -45,35 +74,37 @@ Always produce:
 ```
 ## QA Report
 
-**Result:** PASS | FAIL
+**Result:** PASS | FAIL | BLOCKED
 
-**Specs run:**
-- [list of spec files, e.g. tests/ui/routes/home.spec.ts]
+**Scope tested:**
+- [routes/screens/components covered]
 
-**Snapshots changed:** (only if FAIL)
-- [snapshot names, e.g. home-chromium-desktop-win32.png, home-chromium-mobile-win32.png]
+**Environment:**
+- URL: [target URL]
+- Window mode: [fullscreen | non-fullscreen (reason)]
+- Viewports: [desktop/mobile tested]
 
-**Flakiness risks:** (if any)
-- [e.g. "Fonts may vary by OS — consider font-display or system font fallback"]
-- [e.g. "Animation visible in viewport — ensure reduced-motion or disable during test"]
+**Evidence (screenshots):**
+- artifacts/qa-screenshots/<run-id>/[file-1]
+- artifacts/qa-screenshots/<run-id>/[file-2]
 
-**Stabilization suggestions:** (if flakiness identified)
-- [concrete steps to reduce flakiness]
+**Acceptance Checklist Mapping:**
+- [criterion] -> PASS/FAIL with brief evidence note
+
+**Defects / Regressions:** (if FAIL)
+- [issue, impact, reproduction steps]
+
+**Automated checks:** (optional)
+- [command/tool] -> [PASS/FAIL/SKIPPED + reason]
+
+**Risks / Follow-ups:**
+- [residual risks, flaky observations, next checks]
 ```
-
----
-
-## Flakiness Risks to Watch
-
-- **Fonts** — Different OS/CI fonts can shift layout. Suggest: `font-display: optional`, system font stack, or explicit test font.
-- **Animations** — Transitions/animations mid-screenshot. Suggest: `prefers-reduced-motion: reduce` or disable animations in test setup.
-- **Timing** — Content loading after screenshot. Suggest: `waitForLoadState("networkidle")` or explicit wait for key elements.
-- **Viewport/DPI** — Different pixel densities. Note project config (e.g. chromium-desktop, chromium-mobile) and OS in snapshot names.
 
 ---
 
 ## Constraints
 
-- Do not run `npm run test:ui:update` on behalf of the user.
-- Do not approve snapshot updates without a written reason.
-- Block merge/approval when diffs are accidental.
+- Keep QA universal and task-driven; avoid product-specific hardcoded flows.
+- Do not hardcode a single test tool or command as default behavior.
+- Do not mark PASS without screenshot evidence paths.

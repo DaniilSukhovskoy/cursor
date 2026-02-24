@@ -1,0 +1,54 @@
+---
+alwaysApply: true
+---
+
+# QA Testing Workflow (Universal)
+
+Use this rule whenever QA verification is requested for UI changes.
+
+## Goal
+
+Ensure QA validates real implementation behavior with reproducible browser evidence, not hardcoded one-off test commands.
+
+## Required QA Flow
+
+1. Start from a frozen spec and acceptance checklist.
+2. Open a **new browser window** dedicated to QA.
+3. Attempt **fullscreen** mode before testing (best effort).
+   - If fullscreen is unavailable, continue and document the reason.
+4. Navigate through changed flows/screens/components in scope.
+5. Verify required states and interactions from the spec:
+   - desktop and mobile behavior
+   - hover/focus/active/disabled/loading/empty states (as applicable)
+   - keyboard accessibility and focus behavior
+   - ESC behavior for overlays/panels when expected
+6. Capture screenshots while validating the flow.
+7. Save screenshots in:
+   - `artifacts/qa-screenshots/<run-id>/...`
+8. Produce a structured QA report with verdict and evidence paths.
+
+## Artifact Conventions
+
+- `run-id` should be unique per QA run (timestamp or task slug).
+- Filenames should include component/screen, viewport, and state when possible.
+- Example:
+  - `artifacts/qa-screenshots/2026-02-24-profile-flow/profile-desktop-default.png`
+
+## Reporting Requirements
+
+QA report must include:
+
+- Result: `PASS | FAIL | BLOCKED`
+- Scope tested (routes/screens/components)
+- Window mode (`fullscreen` or non-fullscreen with reason)
+- Evidence paths (screenshot files)
+- Acceptance criteria mapping (criterion -> pass/fail with note)
+- Defects/regressions with impact + reproduction steps
+- Risks/follow-ups
+
+## Constraints
+
+- Do not hardcode product-specific routes or components in the QA process.
+- Do not hardcode a single test tool/command as the universal default.
+- Automated suites (Playwright or others) are optional additions unless explicitly required by task/workflow.
+- Do not claim PASS without screenshot evidence saved to artifact directory.
