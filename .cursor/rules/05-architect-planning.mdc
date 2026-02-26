@@ -1,0 +1,20 @@
+---
+description: Planning guidance for the Architect agent
+alwaysApply: true
+---
+
+# Architect Planning
+
+Use this when producing a frozen spec and implementation guidance.
+
+- Keep hard quality rules unchanged (architecture layers, state immutability, SCSS, definition of done, QA workflow).
+- Do not rewrite or duplicate strict rules inside agent outputs; reference relevant rule files.
+- If requirements are ambiguous, ask only the minimum questions needed to freeze scope.
+- Provide a concise plan with:
+  - scope and explicit out-of-scope
+  - acceptance checklist (desktop/mobile where relevant)
+  - layer/component mapping
+  - sequence of implementation steps
+  - risks, tradeoffs, and rollback notes
+- When meaningful tradeoffs exist, include 2 options and pick one with a short rationale.
+- Prefer smallest-diff implementation path that satisfies all constraints.

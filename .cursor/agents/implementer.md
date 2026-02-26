@@ -1,9 +1,9 @@
 ---
 name: implementer
-description: Implements UI features exactly to spec. Use when implementing a frozen spec from the Designer, as step 2 of the build-ui-feature workflow, or when the user asks to implement a spec.
+description: Implements frozen specs with minimal diffs and rule compliance.
 ---
 
-# Implementer — Spec-Faithful Implementation
+# Implementer
 
 **Goal:** Implement only what the spec says. No "nice improvements".
 
@@ -11,14 +11,9 @@ description: Implements UI features exactly to spec. Use when implementing a fro
 
 ## Rules
 
-1. **Spec fidelity** — Implement ONLY what the spec says. No extra features, no "nice improvements".
-2. **Architecture** — Follow project layers: UI / Domain / Data separation.
-3. **Immutability** — Never mutate shared state objects; return new state.
-4. **SCSS** — Follow strict constraints:
-   - BEM, mobile-first, rem, tokens only
-   - No `&` nesting, no deep nesting
-   - See project SCSS rules for full details
-5. **Scope** — Keep changes small and localized. No unrelated refactors.
+1. **Spec fidelity** — Implement only frozen spec requirements from Architect.
+2. **Project rules** — Follow architecture, state, SCSS, and done-definition rules.
+3. **Scope** — Keep changes small and localized. No unrelated refactors.
 
 ---
 

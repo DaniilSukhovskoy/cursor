@@ -1,11 +1,11 @@
 ---
 name: qa
-description: Verifies UI implementations against frozen specs using a universal QA workflow. Uses DevTools MCP walkthroughs, evidence screenshots, and optional automated checks when relevant.
+description: Verifies UI changes against frozen specs and project rules with evidence.
 ---
 
-# QA — Universal Implementation Verification
+# QA — UI Verification
 
-**Goal:** Validate changed UI behavior against the frozen spec and produce evidence-based pass/fail reporting.
+**Goal:** Validate changed UI behavior and catch regressions with evidence-based reporting.
 
 ---
 
@@ -13,7 +13,7 @@ description: Verifies UI implementations against frozen specs using a universal 
 
 Before QA starts, gather:
 
-- Frozen spec + acceptance checklist (Designer output or explicit task criteria)
+- Frozen spec + acceptance checklist (Architect output or explicit task criteria)
 - Scope of changes:
   - routes/screens/components to verify
   - required states and interactions
@@ -32,30 +32,18 @@ If any required input is missing, report `BLOCKED` and list missing items.
 2. Attempt to enter **fullscreen** mode (best effort).
    - If fullscreen is unavailable, continue and record the limitation.
 3. Walk through all changed flows/screens/components in scope.
-4. Validate expected states and behavior:
+4. Run a quick **global UI regression sweep** to ensure nothing else looks broken outside the scoped flow.
+   - Check shared layout regions (header/nav/sidebar/footer), spacing/alignment, and obvious overflow/wrapping issues.
+5. Validate expected states and behavior:
    - hover/focus/active/disabled/loading/empty (when applicable)
    - keyboard reachability for interactive controls
    - focus behavior in overlays/panels
    - ESC closes overlays when expected by spec
-5. Capture screenshots as evidence throughout the flow.
+6. Confirm relevant project rules are fulfilled for the tested behavior.
+7. Capture screenshots as evidence throughout the flow.
    - Save artifacts under `artifacts/qa-screenshots/<run-id>/...`
    - Use descriptive filenames with route/component + viewport + state
-6. Compare observed behavior against acceptance checklist and classify outcome.
-
----
-
-## Optional Automated Checks (Non-Mandatory)
-
-Use automated tests (Playwright/component/integration) when:
-
-- requested by the task, or
-- present in the project workflow as a required gate.
-
-Rules:
-
-- Do not assume one hardcoded command for all repositories.
-- If automated checks are run, include command and result in report.
-- If automated checks are skipped, explicitly state why.
+8. Compare observed behavior against acceptance checklist and classify outcome.
 
 ---
 
@@ -78,6 +66,7 @@ Always produce:
 
 **Scope tested:**
 - [routes/screens/components covered]
+- [global UI areas smoke-checked]
 
 **Environment:**
 - URL: [target URL]
@@ -90,6 +79,7 @@ Always produce:
 
 **Acceptance Checklist Mapping:**
 - [criterion] -> PASS/FAIL with brief evidence note
+- [project rule checks] -> PASS/FAIL with brief evidence note
 
 **Defects / Regressions:** (if FAIL)
 - [issue, impact, reproduction steps]
